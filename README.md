@@ -229,6 +229,10 @@ Before starting, make sure you have:
 
 <img src="screenshots/04-grafana-login.png" alt="Grafana login page and home dashboard on port 3000" width="700">
 
+- After loggedin
+
+<img src="screenshots/04-grafana-home.png" alt="Grafana login page and home dashboard on port 3000" width="700">
+
 ### 5. Add Prometheus as a Data Source
 
 - Connected Grafana to Prometheus:
@@ -246,19 +250,24 @@ Before starting, make sure you have:
 
 Created a Grafana dashboard with panels for CPU, memory, disk, and network:
 
-1. Go to **Dashboards → New → New Dashboard**.
-2. Click **Add visualization** and select the **Prometheus** data source.
+1. Go to **Dashboards → New → New Dashboard **.
+2. Click **Add Panel and Add visualization** and select the **Prometheus** data source.
 3. For each panel:
    - Paste the relevant PromQL query (see Step 7).
    - Set the panel title (e.g. "CPU Utilization").
    - Choose a visualization type — **Time series** works well for CPU/Memory/Network, and **Gauge** works well for Disk.
    - Set the unit to **Percent (0–100)** for the CPU/Memory/Disk panels.
+   > <img src="screenshots/06-grafana-dashboard-set-panel.png" width="700">
+
 4. Repeat for all four panels:
    - **CPU Utilization**
    - **Memory Utilization**
    - **Disk Utilization**
    - **Network Traffic**
 5. Click **Save dashboard**, give it a name (e.g. "Linux Server Monitoring"), and save.
+  > <img src="screenshots/06-grafana-dashboard-save.png" width="700">
+
+Grafana dashboard with CPU, Memory, Disk and Network panels
 
 <img src="screenshots/06-grafana-dashboard-overview.png" alt="Grafana dashboard with CPU, Memory, Disk and Network panels" width="700">
 
@@ -270,7 +279,7 @@ Each query below was entered directly into the panel's query editor (Step 6 → 
 |---|---|
 | CPU Usage | `100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)` |
 | Memory Usage | `(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100` |
-| Disk Usage | `100 - ((node_filesystem_avail_bytes{fstype!~"tmpfs\|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs\|overlay"}) * 100)` |
+| Disk Usage | `100 - ((node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"}) * 100)` |
 | Network Traffic (Receive) | `rate(node_network_receive_bytes_total{device!="lo"}[5m])` |
 | Network Traffic (Transmit) | `rate(node_network_transmit_bytes_total{device!="lo"}[5m])` |
 
