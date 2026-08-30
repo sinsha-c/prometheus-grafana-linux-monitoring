@@ -378,15 +378,16 @@ Repeat the same flow for the disk alert:
   stress --cpu 4 --timeout 360s   # keeps 4 CPU cores busy for 6 minutes
   ```
 
-Grafana alert showing Firing state after threshold breach
+*Grafana alert showing Firing state after threshold breach*
 
 <img src="screenshots/10-alert-firing-state-cpu.png" alt="Grafana alert showing Firing state after threshold breach" width="700">
 
-Alert notification received in configured channel
+
+*Alert notification received in configured channel*
 
 <img src="screenshots/11-notification-received-cpu.png" alt="Alert notification received in configured channel" width="700">
 
-Alert notification received after it resolved.
+*Received a [RESOLVED] notification once the CPU alert returned to normal.*
 
 <img src="screenshots/11-resolved-notification-received-cpu.png" alt="Alert notification resolved" width="700">
 
