@@ -38,6 +38,7 @@ This project simulates a common real-world DevOps responsibility: keeping visibi
 
 **Flow:** Node Exporter collects host metrics → Prometheus scrapes and stores them → Grafana queries Prometheus (via PromQL) to render dashboards and evaluate alert rules → notifications fire when thresholds are crossed.
 
+> **Note:** This lab runs Prometheus and Grafana on the same server for simplicity. In production, they're commonly split across separate servers — e.g. multiple Prometheus instances feeding one central Grafana — for better resource isolation and scaling. Grafana just needs network access to Prometheus's port `9090`; nothing else changes.
 ---
 
 ## Prerequisites
@@ -413,9 +414,6 @@ Repeat the same flow for the disk alert:
 ## Author
 
 **Sinsha C**
-
-[![GitHub](https://img.shields.io/badge/GitHub-sinsha--c-181717?style=flat&logo=github&logoColor=white)](https://github.com/sinsha-c)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-sinshac-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/sinshac)
  
 ## Connect
 
