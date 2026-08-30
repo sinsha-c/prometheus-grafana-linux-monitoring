@@ -285,46 +285,87 @@ Each query below was entered directly into the panel's query editor (Step 6 → 
 
 <img src="screenshots/07-promql-query-editor.png" alt="PromQL query editor in Grafana showing a metric query" width="700">
 
-### 8. Configure Alert Rules
+### 8. Configure Alert Notifications
 
-Set up alert rules in Grafana for critical thresholds:
+Create the contact point first, since the alert rule wizard needs one to exist before you can select it:
+ 
+1. Go to **Alerting → Notification configuration**.
+2. Open the **Contact points** tab and click **Create contact point**.
+3. Enter a **Name** (e.g. `Sinsha`) and set **Integration** to **Email**.
+4. Under **Addresses**, enter the recipient email address (e.g. `mailtosinsha@gmail.com`) — multiple addresses can be separated with `;`, `,`, or a newline.
+5. Optionally enable **Single email** under Optional Email settings to send one email to all recipients instead of one per recipient.
+6. Click **Save**.
 
-1. Go to **Alerting → Alert rules → New alert rule**.
-2. **CPU alert:**
-   - Query: `100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)`
-   - Condition: `IS ABOVE 80`
-   - Evaluation: evaluate every `1m`, for `5m` (fires only after the condition holds for 5 minutes)
-   - Name: `High CPU Usage`
-3. **Disk alert:**
-   - Query: `100 - ((node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"}) * 100)`
-   - Condition: `IS ABOVE 80`
-   - Evaluation: evaluate every `1m`, for `5m`
-   - Name: `High Disk Usage`
-4. Add a summary/description annotation to each rule (e.g. `CPU usage is above 80% for more than 5 minutes`).
-5. Assign both rules to a folder (e.g. `Server Monitoring`) and save.
+<img src="screenshots/08-contact-point-configuration.png" alt="Grafana contact point configuration" width="700">
 
+7. Edit the configuration and test mail will say "Test notification failed
+SMTP not configured, check your grafana.ini config file's [smtp] section"
+
+<img src="screenshots/08-test-mail-failed.png" width="700"> 
+ 
+> Before creating the contact point, configure SMTP so Grafana can actually send emails — the contact point alone doesn't send mail without it:
+ 
+1. Generate an app password for your Gmail account. Google blocks sign-ins from apps like Grafana that use a plain username/password over SMTP. Go straight to **[myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)** (or search "App passwords" in the Google Account search bar), name it (e.g. "Grafana"), and click **Create**. 2-Step Verification must already be turned on for this page to be accessible.
+2. Open `/etc/grafana/grafana.ini` and find (or add) the `[smtp]` section:
+```ini
+   [smtp]
+   enabled = true
+   host = smtp.gmail.com:587
+   user = your-email@gmail.com
+   password = your-16-character-app-password
+   from_address = your-email@gmail.com
+   from_name = Grafana
+   skip_verify = false
+```
+3. Restart Grafana to apply the change:
+```bash
+   sudo systemctl restart grafana-server
+```
+4. Test mail works now. 
+
+### 9. Configure Alert Rules
+ 
+Set up alert rules in Grafana for critical thresholds, using **Alerting → Alert rules → New alert rule**:
+ 
+1. **Enter alert rule name** — e.g. `High CPU Usage`.
+2. **Define query and alert condition:**
+   - Paste the relevant PromQL query into the query editor (e.g. `100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)`).
+   - Leave the time range at the default (`10m` to now) — it only affects the preview, not the alert itself.
+   - Under **Alert condition**, set **WHEN QUERY** → **Is above** → `80`.
+   - Click **Preview alert rule condition** to confirm it evaluates as expected before saving.
+   
+   <img src="screenshots/09-alert-rule-configuration1.png" alt="Grafana alert rule configuration for CPU and disk thresholds" width="700">
+
+3. **Add folder and labels:**
+   - Folder: create or select one (e.g. `Server Monitoring`).
+   - Labels: optional — add labels like `severity=critical` if you want to route alerts by label later.
+4. **Set evaluation behavior:**
+   - Evaluation group and interval: create a new evaluation group (e.g. `server-monitoring`) and set it to evaluate every `1m`.
+   - Pending period: `5m` — the condition must hold for 5 minutes before the alert fires.
+   - Keep firing for: `None` — the alert returns to Normal as soon as the condition clears.
+
+   <img src="screenshots/09-alert-rule-configuration2.png" alt="Grafana alert rule configuration for CPU and disk thresholds" width="700">
+
+5. **Configure notifications:**
+   - Recipient → Contact point: select the `email-alerts` contact point created in Step 8.
+6. **Configure notification message:**
+   - Summary: e.g. `CPU usage is above 80% for more than 5 minutes`.
+   - Description and Runbook URL are optional.
+7. Click **Save**.
+
+   <img src="screenshots/09-alert-rule-configuration3.png" alt="Grafana alert rule configuration for CPU and disk thresholds" width="700">
+
+Repeat the same flow for the disk alert:
+- Query: `100 - ((node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"}) * 100)`
+- Condition: **Is above** `80`
+- Pending period: `5m`
+- Name: `High Disk Usage`
 **Alert rules configured:**
 - CPU usage above 80% for 5 minutes
 - Disk usage above 80% for 5 minutes
-
-<img src="screenshots/08-alert-rule-configuration.png" alt="Grafana alert rule configuration for CPU and disk thresholds" width="700">
-
-### 9. Configure Alert Notifications
-
-- Created a Grafana contact point (notification channel):
-  1. Go to **Alerting → Contact points → Add contact point**.
-  2. Name it (e.g. `email-alerts`) and choose a channel type — **Email** (or Slack/webhook).
-  3. For email, enter the recipient address (SMTP must be configured in `/etc/grafana/grafana.ini` under `[smtp]`, or use a service such as Gmail SMTP or Mailgun).
-  4. Click **Test** to send a sample notification, then **Save**.
-
-- Linked the contact point to the alert rules:
-  1. Go to **Alerting → Notification policies**.
-  2. Edit the default policy (or add a nested policy) and set **Contact point** to `email-alerts`.
-  3. Optionally match by label (e.g. `severity=critical`) to route only specific alerts.
-
-- Verified that the notification policy routes alerts correctly using the **Test** button on the contact point.
-
-<img src="screenshots/09-contact-point-notification-policy.png" alt="Grafana contact point and notification policy configuration" width="700">
+> By default, selecting a contact point directly in the rule (Step 5 above) routes notifications for that rule automatically. If you later want different alerts routed to different contacts based on labels, you can additionally configure this under **Alerting → Notification policies**.
+ 
+<img src="screenshots/09-alert-rule-configuration.png" alt="Grafana alert rule configuration for CPU and disk thresholds" width="700">
 
 ### 10. Test the Alerting Pipeline
 
@@ -334,6 +375,9 @@ Set up alert rules in Grafana for critical thresholds:
   sudo apt-get install -y stress
   stress --cpu 4 --timeout 360s   # keeps 4 CPU cores busy for 6 minutes
   ```
+
+<img src="screenshots/10-alert-firing-state-cpu.png" alt="Grafana alert showing Firing state after threshold breach" width="700">
+<img src="screenshots/11-notification-received-cpu.png" alt="Alert notification received in configured channel" width="700">
 
 - Filled disk space temporarily to cross the disk threshold:
 
@@ -349,7 +393,7 @@ Set up alert rules in Grafana for critical thresholds:
 
 - Confirmed that the notification was received successfully in the configured email inbox or Slack channel.
 
-<img src="screenshots/10-alert-firing-state.png" alt="Grafana alert showing Firing state after threshold breach" width="700">
+<img src="screenshots/10-alert-firing-state-disk.png" alt="Grafana alert showing Firing state after threshold breach" width="700">
 <img src="screenshots/11-notification-received.png" alt="Alert notification received in configured channel" width="700">
 
 > Save each screenshot inside a `screenshots/` folder in the repo root using the filenames above (or update the paths in this file to match your own naming).
