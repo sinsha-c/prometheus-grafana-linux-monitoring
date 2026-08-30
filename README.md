@@ -257,7 +257,7 @@ Created a Grafana dashboard with panels for CPU, memory, disk, and network:
    - Set the panel title (e.g. "CPU Utilization").
    - Choose a visualization type — **Time series** works well for CPU/Memory/Network, and **Gauge** works well for Disk.
    - Set the unit to **Percent (0–100)** for the CPU/Memory/Disk panels.
-   > <img src="screenshots/06-grafana-dashboard-set-panel.png" width="700">
+     <img src="screenshots/06-grafana-dashboard-set-panel.png" width="700">
 
 4. Repeat for all four panels:
    - **CPU Utilization**
@@ -265,7 +265,7 @@ Created a Grafana dashboard with panels for CPU, memory, disk, and network:
    - **Disk Utilization**
    - **Network Traffic**
 5. Click **Save dashboard**, give it a name (e.g. "Linux Server Monitoring"), and save.
-  > <img src="screenshots/06-grafana-dashboard-save.png" width="700">
+   <img src="screenshots/06-grafana-dashboard-save.png" width="700">
 
 Grafana dashboard with CPU, Memory, Disk and Network panels
 
@@ -410,11 +410,16 @@ Repeat the same flow for the disk alert:
 
 ---
 
+## Author
+
+**Sinsha C**
+
+[![GitHub](https://img.shields.io/badge/GitHub-sinsha--c-181717?style=flat&logo=github&logoColor=white)](https://github.com/sinsha-c)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-sinshac-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/sinshac)
+ 
 ## Connect
 
 If you're on a similar DevOps learning journey, feel free to connect or follow along:
 
-- **LinkedIn:** [linkedin.com/in/sinshac](https://linkedin.com/in/sinshac/)
-- **GitHub:** [github.com/sinsha-c](https://github.com/sinsha-c)
-
-#AWSDevOpsRestartJourney #DevOps #Prometheus #Grafana #Monitoring #Linux
+[![GitHub](https://img.shields.io/badge/GitHub-sinsha--c-181717?style=flat&logo=github&logoColor=white)](https://github.com/sinsha-c)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-sinshac-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/sinshac)
