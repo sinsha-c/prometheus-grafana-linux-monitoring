@@ -370,6 +370,7 @@ Repeat the same flow for the disk alert:
 
 ### 10. Test the Alerting Pipeline
 
+#### High CPU Load
 - Generated artificial CPU load to cross the CPU threshold:
 
   ```bash
@@ -377,8 +378,20 @@ Repeat the same flow for the disk alert:
   stress --cpu 4 --timeout 360s   # keeps 4 CPU cores busy for 6 minutes
   ```
 
+Grafana alert showing Firing state after threshold breach
+
 <img src="screenshots/10-alert-firing-state-cpu.png" alt="Grafana alert showing Firing state after threshold breach" width="700">
+
+Alert notification received in configured channel
+
 <img src="screenshots/11-notification-received-cpu.png" alt="Alert notification received in configured channel" width="700">
+
+Alert notification received after it resolved.
+
+<img src="screenshots/11-resolved-notification-received-cpu.png" alt="Alert notification resolved" width="700">
+
+
+#### High Disk Usage
 
 - Filled disk space temporarily to cross the disk threshold:
 
@@ -396,8 +409,6 @@ Repeat the same flow for the disk alert:
 
 <img src="screenshots/10-alert-firing-state-disk.png" alt="Grafana alert showing Firing state after threshold breach" width="700">
 <img src="screenshots/11-notification-received.png" alt="Alert notification received in configured channel" width="700">
-
-> Save each screenshot inside a `screenshots/` folder in the repo root using the filenames above (or update the paths in this file to match your own naming).
 
 ---
 
