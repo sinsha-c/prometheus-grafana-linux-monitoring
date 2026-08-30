@@ -376,6 +376,9 @@ Repeat the same flow for the disk alert:
   stress --cpu 4 --timeout 360s   # keeps 4 CPU cores busy for 6 minutes
   ```
 
+<img src="screenshots/10-alert-firing-state-cpu.png" alt="Grafana alert showing Firing state after threshold breach" width="700">
+<img src="screenshots/11-notification-received-cpu.png" alt="Alert notification received in configured channel" width="700">
+
 - Filled disk space temporarily to cross the disk threshold:
 
   ```bash
@@ -390,7 +393,7 @@ Repeat the same flow for the disk alert:
 
 - Confirmed that the notification was received successfully in the configured email inbox or Slack channel.
 
-<img src="screenshots/10-alert-firing-state.png" alt="Grafana alert showing Firing state after threshold breach" width="700">
+<img src="screenshots/10-alert-firing-state-disk.png" alt="Grafana alert showing Firing state after threshold breach" width="700">
 <img src="screenshots/11-notification-received.png" alt="Alert notification received in configured channel" width="700">
 
 > Save each screenshot inside a `screenshots/` folder in the repo root using the filenames above (or update the paths in this file to match your own naming).
