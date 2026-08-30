@@ -34,7 +34,7 @@ This project simulates a common real-world DevOps responsibility: keeping visibi
 
 ## Architecture
 
-<img src="screenshots/architecture-diagram.png" alt="Architecture diagram: Node Exporter to Prometheus to Grafana to Alert Channel" width="750">
+<img src="docs/architecture-diagram.png" alt="Architecture diagram: Node Exporter to Prometheus to Grafana to Alert Channel" width="750">
 
 **Flow:** Node Exporter collects host metrics → Prometheus scrapes and stores them → Grafana queries Prometheus (via PromQL) to render dashboards and evaluate alert rules → notifications fire when thresholds are crossed.
 
